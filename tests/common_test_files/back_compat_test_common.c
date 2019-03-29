@@ -13,15 +13,6 @@
 #include <string.h>
 #endif
 
-#ifdef AZIOT_LINUX
-#include <unistd.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#endif
- 
 #include "iothub.h"
 #include "iothub_device_client_ll.h"
 #include "iothub_client_options.h"
@@ -378,7 +369,7 @@ static IOTHUB_DEVICE_CLIENT_LL_HANDLE create_device_client(BACK_COMPAT_INFO* bac
             break;
         }
     }
-    // Always set the log trace option 
+    // Always set the log trace option
     if (result != NULL)
     {
         bool trace_on = true;
@@ -390,7 +381,7 @@ static IOTHUB_DEVICE_CLIENT_LL_HANDLE create_device_client(BACK_COMPAT_INFO* bac
 static int test_all_device_options(TEST_PROTOCOL_TYPE protocol_type, IOTHUB_DEVICE_CLIENT_LL_HANDLE device_client)
 {
     int result = 0;
-    
+
     size_t refresh_sas_token = 30 * 60;
     size_t sas_token_refresh = 30 * 60;
     tickcounter_ms_t msg_timeout = 2*60;
