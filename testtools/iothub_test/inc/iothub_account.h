@@ -5,7 +5,6 @@
 #define IOTHUBACCOUNT_H
 
 #include "iothub_messaging_ll.h"
-#include "azure_c_shared_utility/crt_abstractions.h"
 
 #ifdef __cplusplus
 #include <cstddef>
@@ -13,13 +12,14 @@ extern "C"
 {
 #else
 #include <stddef.h>
+#include <stdbool.h>
 #endif
 
 #define IOTHUB_ACCOUNT_AUTH_METHOD_VALUES      \
     IOTHUB_ACCOUNT_AUTH_CONNSTRING,            \
     IOTHUB_ACCOUNT_AUTH_X509                   \
 
-DEFINE_ENUM(IOTHUB_ACCOUNT_AUTH_METHOD, IOTHUB_ACCOUNT_AUTH_METHOD_VALUES);
+MU_DEFINE_ENUM(IOTHUB_ACCOUNT_AUTH_METHOD, IOTHUB_ACCOUNT_AUTH_METHOD_VALUES);
 
 typedef struct IOTHUB_PROVISIONED_DEVICE_TAG {
     char* connectionString;

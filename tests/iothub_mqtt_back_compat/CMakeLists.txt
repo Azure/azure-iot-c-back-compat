@@ -12,11 +12,11 @@ set(theseTestsName iothub_mqtt_back_compat)
 
 set(${theseTestsName}_test_files
     ${theseTestsName}.c
-    ../common_test_files/back_compat_test_common.c
 )
 
 set(${theseTestsName}_c_files
     ${IOTHUB_REPO_FOLDER}/certs/certs.c
+    ../common_test_files/back_compat_test_common.c
 )
 
 set(${theseTestsName}_h_files
@@ -43,11 +43,26 @@ if (TARGET ${theseTestsName}_exe)
             aziotsharedutil
             iothub_client_mqtt_transport
     )
-    linkUAMQP(${theseTestsName}_exe)
     linkMqttLibrary(${theseTestsName}_exe)
 endif()
 
 if (WIN32)
+    if(TARGET ${theseTestsName}_dll)
+        target_link_libraries(${theseTestsName}_dll
+                iothub_test
+                iothub_client
+                iothub_client_amqp_transport
+                iothub_service_client
+                aziotsharedutil
+                rpcrt4
+        )
+        linkSharedUtil(${theseTestsName}_dll)
+        linkMqttLibrary(${theseTestsName}_dll)
+
+        target_link_libraries(${theseTestsName}_dll
+            rpcrt4
+        )
+    endif()
 
    if(TARGET ${theseTestsName}_exe)
        target_link_libraries(${theseTestsName}_exe

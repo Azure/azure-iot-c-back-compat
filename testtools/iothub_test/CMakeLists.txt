@@ -8,12 +8,12 @@ compileAsC99()
 usePermissiveRulesForSamplesAndTests()
 
 set(iothub_test_c_files
-    ./src/iothubtest.c
+    # ./src/iothubtest.c
     ./src/iothub_account.c
 )
 
 set(iothub_test_h_files
-    ./inc/iothubtest.h
+    # ./inc/iothubtest.h
     ./inc/iothub_account.h
 )
 

@@ -3,86 +3,90 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "testrunnerswitcher.h"
+
 #include "back_compat_test_common.h"
 #include "iothubtransportmqtt.h"
 
-//BEGIN_TEST_SUITE(iothub_mqtt_back_compat)
-//
-//TEST_SUITE_INITIALIZE(TestClassInitialize)
-//{
-//    e2e_init(TEST_MQTT, false);
-//}
-//
-//TEST_SUITE_CLEANUP(TestClassCleanup)
-//{
-//    e2e_deinit();
-//}
-//
-//TEST_FUNCTION_INITIALIZE(TestMethodInitialize)
-//{
-//    g_e2e_test_options.use_special_chars = false;
-//}
-//
-//TEST_FUNCTION(MQTT_test_sending_telemetry_with_connection_string)
-//{
-static int MQTT_test_sending_telemetry_string_with_connection_string(void)
-{
-    return send_telemetry_with_device_connection_string(DEVICE_CREATION_CONN_STRING, TEST_MESSAGE_CREATE_STRING, MQTT_Protocol);
-}
+static BACK_COMPAT_HANDLE g_back_compat_handle;
 
-int main(void)
-{
-    size_t failedTestCount = 0;
+BEGIN_TEST_SUITE(iothub_mqtt_back_compat)
 
-    back_compat_init(TEST_MQTT);
+    TEST_SUITE_INITIALIZE(suite_init)
+    {
+        g_back_compat_handle = back_compat_init(TEST_MQTT);
+        ASSERT_IS_NOT_NULL(g_back_compat_handle, "Failure creating iothub device in hub");
+    }
 
-    failedTestCount += MQTT_test_sending_telemetry_string_with_connection_string();
+    TEST_SUITE_CLEANUP(suite_cleanup)
+    {
+        back_compat_deinit(g_back_compat_handle);
+    }
 
-    back_compat_deinit();
-    return failedTestCount;
-}
-/*TEST_FUNCTION(IoTHub_MQTT_SendEvent_e2e_sas_urlEncode)
-{
-#ifdef AZIOT_LINUX
-    g_e2e_test_options.set_mac_address = true;
-#endif
-    g_e2e_test_options.use_special_chars = true;
-    e2e_send_event_test_sas(MQTT_Protocol);
-}
+    TEST_FUNCTION_INITIALIZE(method_init)
+    {
+    }
 
-TEST_FUNCTION(IoTHub_MQTT_RecvMessage_E2ETest_sas)
-{
-#ifdef AZIOT_LINUX
-    g_e2e_test_options.set_mac_address = false;
-#endif
-    e2e_recv_message_test_sas(MQTT_Protocol);
-}
+    TEST_FUNCTION_CLEANUP(method_cleanup)
+    {
+    }
 
-TEST_FUNCTION(IoTHub_MQTT_RecvMessage_E2ETest_sas_urlDecode)
-{
-#ifdef AZIOT_LINUX
-    g_e2e_test_options.set_mac_address = false;
-#endif
-    g_e2e_test_options.use_special_chars = true;
-    e2e_recv_message_test_sas(MQTT_Protocol);
-}
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_CreateFromConnectionString
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_Destroy
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_SetConnectionStatusCallback
+    // COMPAT_TEST_07_IoTHubMessage_CreateFromString
+    // COMPAT_TEST_07_IoTHubMessage_GetContentType
+    // COMPAT_TEST_07_IoTHubMessage_GetString
+    // COMPAT_TEST_07_IoTHubMessage_SetMessageId
+    // COMPAT_TEST_07_IoTHubMessage_GetMessageId
+    // COMPAT_TEST_07_IoTHubMessage_SetCorrelationId
+    // COMPAT_TEST_07_IoTHubMessage_GetCorrelationId
+    // COMPAT_TEST_07_IoTHubMessage_SetContentTypeSystemProperty
+    // COMPAT_TEST_07_IoTHubMessage_GetContentTypeSystemProperty
+    // COMPAT_TEST_07_IoTHubMessage_SetContentEncodingSystemProperty
+    // COMPAT_TEST_07_IoTHubMessage_GetContentEncodingSystemProperty
+    // COMPAT_TEST_07_IoTHubMessage_SetOutputName
+    // COMPAT_TEST_07_IoTHubMessage_GetOutputName
+    // COMPAT_TEST_07_IoTHubMessage_SetInputName
+    // COMPAT_TEST_07_IoTHubMessage_GetInputName
+    // COMPAT_TEST_07_IoTHubMessage_SetProperty
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_SendEventAsync
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_DoWork
+    // COMPAT_TEST_07_IoTHubDeviceClient_LL_Destroy
+    // COMPAT_TEST_07_MQTT_Protocol
+    // COMPAT_TEST_07_IOTHUB_MESSAGE_HANDLE
+    // COMPAT_TEST_07_IOTHUB_DEVICE_CLIENT_LL_HANDLE
+    // COMPAT_TEST_07_IOTHUB_CLIENT_EVENT_CONFIRMATION_CALLBACK
+    // COMPAT_TEST_07_TRANSPORT_PROVIDER
+    TEST_FUNCTION(MQTT_test_telemetry_string_with_connection_string)
+    {
+        int result = send_telemetry_with_device_client(g_back_compat_handle, DEVICE_CREATION_CONN_STRING, TEST_MESSAGE_CREATE_STRING, MQTT_Protocol);
+        ASSERT_ARE_EQUAL(int, 0, result);
+    }
 
-#ifndef __APPLE__
-TEST_FUNCTION(IoTHub_MQTT_SendEvent_e2e_x509)
-{
-#ifdef AZIOT_LINUX
-    g_e2e_test_options.set_mac_address = false;
-#endif
-    e2e_send_event_test_x509(MQTT_Protocol);
-}
+    TEST_FUNCTION(MQTT_test_telemetry_byte_array_with_create)
+    {
+        int result = send_telemetry_with_device_client(g_back_compat_handle, DEVICE_CREATION_CREATE, TEST_MESSAGE_CREATE_BYTE_ARRAY, MQTT_Protocol);
+        ASSERT_ARE_EQUAL(int, 0, result);
+    }
 
+    TEST_FUNCTION(MQTT_test_c2d_with_create)
+    {
+        int result = test_c2d_with_device_client(g_back_compat_handle, DEVICE_CREATION_CREATE, MQTT_Protocol);
+        ASSERT_ARE_EQUAL(int, 0, result);
+    }
 
-TEST_FUNCTION(IoTHub_MQTT_RecvMessage_E2ETest_x509)
-{
-#ifdef AZIOT_LINUX
-    g_e2e_test_options.set_mac_address = true;
-#endif
-    e2e_recv_message_test_x509(MQTT_Protocol);
-}*/
+    TEST_FUNCTION(MQTT_test_methods_with_create)
+    {
+        int result = test_method_with_device_client(g_back_compat_handle, DEVICE_CREATION_CREATE, MQTT_Protocol);
+        ASSERT_ARE_EQUAL(int, 0, result);
+    }
 
-//END_TEST_SUITE(iothub_mqtt_back_compat)
+    TEST_FUNCTION(MQTT_test_methods_with_connection_string)
+    {
+        int result = test_twin_with_device_client(g_back_compat_handle, DEVICE_CREATION_CONN_STRING, MQTT_Protocol);
+        ASSERT_ARE_EQUAL(int, 0, result);
+    }
+
+END_TEST_SUITE(iothub_mqtt_back_compat)
