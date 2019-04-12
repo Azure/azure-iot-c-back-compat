@@ -167,14 +167,14 @@ static int retrieveConnStringInfo(IOTHUB_ACCOUNT_INFO* accountInfo)
         }
         else if ((accountInfo->keyName = (char*)malloc(endName - beginName + 1)) == NULL)
         {
-            LogError("Failure allocating hostName.\r\n");
+            LogError("Failure allocating keyname.\r\n");
             free(accountInfo->iothubName);
             free(accountInfo->hostname);
             result = MU_FAILURE;
         }
         else if ((accountInfo->sharedAccessKey = (char*)malloc(totalLen + 1 - beginKey + 1)) == NULL)
         {
-            LogError("Failure allocating hostName.\r\n");
+            LogError("Failure allocating shared access key.\r\n");
             free(accountInfo->iothubName);
             free(accountInfo->keyName);
             free(accountInfo->hostname);
@@ -642,6 +642,7 @@ static char* convert_base64_to_string(const char* base64_cert)
 
 IOTHUB_ACCOUNT_INFO_HANDLE IoTHubAccount_Init_With_Config(IOTHUB_ACCOUNT_CONFIG* config, bool testingModules)
 {
+    (void)testingModules;
     IOTHUB_ACCOUNT_INFO* iothub_account_info;
 
     if (config == NULL)

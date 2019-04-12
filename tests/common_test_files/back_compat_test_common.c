@@ -568,7 +568,7 @@ BACK_COMPAT_HANDLE back_compat_init(TEST_PROTOCOL_TYPE protocol_type)
     }
     else if ((result = (BACK_COMPAT_INFO*)malloc(sizeof(BACK_COMPAT_INFO))) == NULL)
     {
-        LogError("Could not initialize IoTHubAccount");
+        LogError("Failure allocating back compat info");
         result = NULL;
     }
     else
@@ -576,7 +576,7 @@ BACK_COMPAT_HANDLE back_compat_init(TEST_PROTOCOL_TYPE protocol_type)
         memset(result, 0, sizeof(BACK_COMPAT_INFO));
         if ((result->tick_cntr_handle = tickcounter_create()) == NULL)
         {
-            LogError("Could not initialize IoTHubAccount");
+            LogError("Failure creating tickcounter object");
             free(result);
             result = NULL;
         }

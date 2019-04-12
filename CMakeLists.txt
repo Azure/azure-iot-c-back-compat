@@ -13,18 +13,7 @@ set(run_e2e_tests OFF)
 set(run_unittests OFF)
 set(skip_samples ON)
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps/parson)
-
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/umock-c)
-#include_directories(${UMOCK_C_INC_FOLDER})
-
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/c-utility)
-#include_directories(${SHARED_UTIL_INC_FOLDER})
-#set_platform_files(${CMAKE_CURRENT_LIST_DIR}/deps/c-utility)
-
 enable_testing()
-
-#include("${CMAKE_CURRENT_LIST_DIR}/configs/iot_test_functions.cmake")
 
 set(CLONE_OPTIONS "-q")
 
@@ -35,24 +24,13 @@ endif()
 if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest/CMakeLists.txt")
     execute_process(COMMAND git clone https://github.com/Azure/azure-ctest.git ${CLONE_OPTIONS} ${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest)
 endif()
-#if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/umock-c/CMakeLists.txt")
-#    execute_process(COMMAND git clone https://github.com/Azure/umock-c.git ${CLONE_OPTIONS} ${CMAKE_CURRENT_SOURCE_DIR}/deps/umock-c)
-#endif()
-
 if (${refresh_sdk} OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk/CMakeLists.txt")
     execute_process(COMMAND git clone https://github.com/Azure/azure-iot-sdk-c.git ${CLONE_OPTIONS} -b ${sdk_branch} --recursive ${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk)
 endif()
 
 # Submodules
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/testrunnerswitcher)
-
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/umock-c)
-#include_directories(${UMOCK_C_INC_FOLDER})
-
-#include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
-
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest)
-#include_directories(${CTEST_INC_FOLDER})
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk)
 set(IOTHUB_REPO_FOLDER ${CMAKE_CURRENT_LIST_DIR}/deps/c-sdk CACHE INTERNAL "Location of the azure c sdk" FORCE)
@@ -64,7 +42,6 @@ include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
 include_directories(${CTEST_INC_FOLDER})
 include_directories(${UMOCK_C_INC_FOLDER})
 
-#????
 include_directories(${SHARED_UTIL_INC_FOLDER})
 
 include_directories(./inc)

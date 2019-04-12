@@ -4,11 +4,11 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 if(NOT (${use_amqp} AND ${use_mqtt}))
-   message(FATAL_ERROR "iothub_mqtt_back_compat being generated without AMQP and MQTT support")
+   message(FATAL_ERROR "iothub_http_back_compat being generated without AMQP and MQTT support")
 endif()
 
 compileAsC11()
-set(theseTestsName iothub_mqtt_back_compat)
+set(theseTestsName iothub_http_back_compat)
 
 set(${theseTestsName}_test_files
     ${theseTestsName}.c
@@ -38,9 +38,8 @@ if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
             iothub_test
             iothub_client
-            iothub_client_mqtt_transport
+            iothub_client_http_transport
             iothub_service_client
-            umqtt
             aziotsharedutil
     )
 endif()
@@ -50,9 +49,8 @@ if (WIN32)
         target_link_libraries(${theseTestsName}_dll
                 iothub_test
                 iothub_client
-                iothub_client_mqtt_transport
+                iothub_client_http_transport
                 iothub_service_client
-                umqtt
                 aziotsharedutil
                 rpcrt4
         )
