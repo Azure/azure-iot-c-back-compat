@@ -1,0 +1,3 @@
+[submodule "deps/umock-c"]
+	path = deps/umock-c
+	url = https://github.com/Azure/umock-c.git
