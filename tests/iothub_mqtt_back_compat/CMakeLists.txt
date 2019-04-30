@@ -3,7 +3,6 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-#compileAsC11()
 set(theseTestsName iothub_mqtt_back_compat)
 
 set(${theseTestsName}_test_files

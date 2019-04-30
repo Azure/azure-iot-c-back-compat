@@ -6,7 +6,7 @@ project(azure_iot_c_back_compat)
 
 set(sdk_branch "master" CACHE STRING "Full path to custom HSM repo library")
 
-option(refresh_sdk "set refresh_sdk to get the latest SDK bits from master (default is OFF)" OFF)
+option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" ON)
 
 # do not add or build any tests of the dependencies
 set(run_e2e_tests OFF)
@@ -19,9 +19,19 @@ enable_testing()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-c-testrunnerswitcher)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-ctest)
 
-set(AZUREIOT_INC_FOLDER "/usr/local/include/azureiot" "/usr/local/include/azureiot/inc" "/usr/local/include/iothub_service_client")
-include_directories(${AZUREIOT_INC_FOLDER})
+if (${use_installed_dependencies})
+    set(AZUREIOT_INC_FOLDER "/usr/local/include/azureiot" "/usr/local/include/azureiot/inc" "/usr/local/include/iothub_service_client")
+else()
+    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/CMakeLists.txt")
+        message("Cloning Azure Iot SDK C...")
+        execute_process(COMMAND git clone https://github.com/Azure/azure-iot-sdk-c.git -q ${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c)
+        execute_process(COMMAND git submodule update --init WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c)
+    endif()
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c")
+    set(AZUREIOT_INC_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/iothub_client/inc" "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/iothub_service_client/inc")
+endif()
 
+include_directories(${AZUREIOT_INC_FOLDER})
 include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
 include_directories(${CTEST_INC_FOLDER})
 include_directories(${UMOCK_C_INC_FOLDER})
