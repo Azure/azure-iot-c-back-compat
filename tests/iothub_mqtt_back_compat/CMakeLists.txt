@@ -38,6 +38,7 @@ if (TARGET ${theseTestsName}_exe)
             uamqp
             umqtt
             aziotsharedutil
+            parson
     )
 endif()
 
@@ -51,6 +52,7 @@ if (WIN32)
                 umqtt
                 aziotsharedutil
                 rpcrt4
+                parson
         )
     endif()
 
@@ -58,9 +60,20 @@ if (WIN32)
        target_link_libraries(${theseTestsName}_exe rpcrt4)
    endif()
 else ()
+message("in here")
     find_package(PkgConfig REQUIRED)
     pkg_search_module(UUID REQUIRED uuid)
     link_directories(${UUID_LIBRARY_DIRS})
 
-    target_link_libraries(${theseTestsName}_exe ${UUID_LIBRARIES} curl parson pthread ssl crypto m)
+    #if (APPLE)
+    #    target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
+    #elseif (LINUX)
+        target_link_libraries(${theseTestsName}_exe 
+        curl
+        ssl
+        crypto
+        m
+        pthread
+        ${UUID_LIBRARIES})
+    #endif()
 endif()

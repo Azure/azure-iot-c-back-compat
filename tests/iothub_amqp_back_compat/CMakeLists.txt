@@ -3,7 +3,6 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-#compileAsC11()
 set(theseTestsName iothub_amqp_back_compat)
 
 set(${theseTestsName}_test_files
@@ -38,6 +37,7 @@ if (TARGET ${theseTestsName}_exe)
             iothub_service_client
             uamqp
             aziotsharedutil
+            parson
     )
 endif()
 
@@ -50,6 +50,7 @@ if (WIN32)
                 uamqp
                 aziotsharedutil
                 rpcrt4
+                parson
         )
 
         target_link_libraries(${theseTestsName}_dll rpcrt4)
@@ -65,10 +66,17 @@ else ()
         link_directories(${UUID_LIBRARY_DIRS})
     endif ()
 
-    if (APPLE)
-        target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
-    elseif (LINUX)
-        target_link_libraries(${theseTestsName}_exe pthread ${UUID_LIBRARIES})
-    endif()
+    #if (APPLE)
+    #    target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
+    #elseif (LINUX)
+        target_link_libraries(${theseTestsName}_exe 
+            curl
+            ssl
+            crypto
+            m
+            pthread
+            ${UUID_LIBRARIES}
+        )
+    #endif()
 endif()
  

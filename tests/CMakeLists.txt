@@ -3,4 +3,4 @@
 
 add_subdirectory(iothub_mqtt_back_compat)
 add_subdirectory(iothub_amqp_back_compat)
-add_subdirectory(iothub_http_back_compat)
+#add_subdirectory(iothub_http_back_compat)
