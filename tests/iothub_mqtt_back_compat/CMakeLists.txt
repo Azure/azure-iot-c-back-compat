@@ -10,7 +10,6 @@ set(${theseTestsName}_test_files
 )
 
 set(${theseTestsName}_c_files
-    #${IOTHUB_REPO_FOLDER}/certs/certs.c
     ../common_test_files/back_compat_test_common.c
     ../../testtools/iothub_test/src/iothub_account.c
 )
