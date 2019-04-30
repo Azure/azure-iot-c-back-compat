@@ -19,10 +19,10 @@ set(${theseTestsName}_h_files
     ../../testtools/iothub_test/inc/iothub_account.h
 )
 
-if (${use_sample_trusted_cert})
-    add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
-    include_directories(${IOTHUB_REPO_FOLDER}/certs)
-endif()
+#if (${use_sample_trusted_cert})
+#    add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
+#    include_directories(${IOTHUB_REPO_FOLDER}/certs)
+#endif()
 
 build_back_compat_test_artifacts(${theseTestsName} "back-compat_tests/iothub_client")
 

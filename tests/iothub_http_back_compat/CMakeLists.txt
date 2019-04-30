@@ -12,16 +12,18 @@ set(${theseTestsName}_test_files
 
 set(${theseTestsName}_c_files
     ../common_test_files/back_compat_test_common.c
+    ../../testtools/iothub_test/src/iothub_account.c
 )
 
 set(${theseTestsName}_h_files
     ../common_test_files/back_compat_test_common.h
+    ../../testtools/iothub_test/src/iothub_account.c
 )
 
-if (${use_sample_trusted_cert})
-    add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
-    include_directories(${IOTHUB_REPO_FOLDER}/certs)
-endif()
+#if (${use_sample_trusted_cert})
+#    add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
+#    include_directories(${IOTHUB_REPO_FOLDER}/certs)
+#endif()
 
 build_back_compat_test_artifacts(${theseTestsName} "back-compat_tests/iothub_client")
 
@@ -31,7 +33,6 @@ include_directories(${IOTHUB_SERVICE_CLIENT_INC_FOLDER})
 
 if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
-            iothub_test
             iothub_client
             iothub_client_http_transport
             iothub_service_client
@@ -42,7 +43,6 @@ endif()
 if (WIN32)
     if(TARGET ${theseTestsName}_dll)
         target_link_libraries(${theseTestsName}_dll
-                iothub_test
                 iothub_client
                 iothub_client_http_transport
                 iothub_service_client
