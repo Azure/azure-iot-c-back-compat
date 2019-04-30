@@ -3,11 +3,7 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-if(NOT (${use_amqp} AND ${use_mqtt}))
-   message(FATAL_ERROR "iothub_mqtt_back_compat being generated without AMQP and MQTT support")
-endif()
-
-compileAsC11()
+#compileAsC11()
 set(theseTestsName iothub_mqtt_back_compat)
 
 set(${theseTestsName}_test_files
@@ -15,12 +11,14 @@ set(${theseTestsName}_test_files
 )
 
 set(${theseTestsName}_c_files
-    ${IOTHUB_REPO_FOLDER}/certs/certs.c
+    #${IOTHUB_REPO_FOLDER}/certs/certs.c
     ../common_test_files/back_compat_test_common.c
+    ../../testtools/iothub_test/src/iothub_account.c
 )
 
 set(${theseTestsName}_h_files
     ../common_test_files/back_compat_test_common.h
+    ../../testtools/iothub_test/inc/iothub_account.h
 )
 
 if (${use_sample_trusted_cert})
@@ -36,10 +34,10 @@ include_directories(${IOTHUB_SERVICE_CLIENT_INC_FOLDER})
 
 if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
-            iothub_test
             iothub_client
             iothub_client_mqtt_transport
             iothub_service_client
+            uamqp
             umqtt
             aziotsharedutil
     )
@@ -48,10 +46,10 @@ endif()
 if (WIN32)
     if(TARGET ${theseTestsName}_dll)
         target_link_libraries(${theseTestsName}_dll
-                iothub_test
                 iothub_client
                 iothub_client_mqtt_transport
                 iothub_service_client
+                uamqp
                 umqtt
                 aziotsharedutil
                 rpcrt4
@@ -62,15 +60,9 @@ if (WIN32)
        target_link_libraries(${theseTestsName}_exe rpcrt4)
    endif()
 else ()
-    if (UNIX) #LINUX OR APPLE
-        find_package(PkgConfig REQUIRED)
-        pkg_search_module(UUID REQUIRED uuid)
-        link_directories(${UUID_LIBRARY_DIRS})
-    endif ()
+    find_package(PkgConfig REQUIRED)
+    pkg_search_module(UUID REQUIRED uuid)
+    link_directories(${UUID_LIBRARY_DIRS})
 
-    if (APPLE)
-        target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
-    elseif (LINUX)
-        target_link_libraries(${theseTestsName}_exe pthread ${UUID_LIBRARIES})
-    endif()
+    target_link_libraries(${theseTestsName}_exe ${UUID_LIBRARIES} curl parson pthread ssl crypto m)
 endif()

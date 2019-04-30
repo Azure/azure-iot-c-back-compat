@@ -15,39 +15,20 @@ set(skip_samples ON)
 
 enable_testing()
 
-set(CLONE_OPTIONS "-q")
-
-#Clone the test submodules if needed
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/testrunnerswitcher/CMakeLists.txt")
-    execute_process(COMMAND git clone https://github.com/Azure/azure-c-testrunnerswitcher.git ${CLONE_OPTIONS} ${CMAKE_CURRENT_SOURCE_DIR}/deps/testrunnerswitcher)
-endif()
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest/CMakeLists.txt")
-    execute_process(COMMAND git clone https://github.com/Azure/azure-ctest.git ${CLONE_OPTIONS} ${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest)
-endif()
-if (${refresh_sdk} OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk/CMakeLists.txt")
-    execute_process(COMMAND git clone https://github.com/Azure/azure-iot-sdk-c.git ${CLONE_OPTIONS} -b ${sdk_branch} --recursive ${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk)
-endif()
-
 # Submodules
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/testrunnerswitcher)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/ctest)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-c-testrunnerswitcher)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-ctest)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/c-sdk)
-set(IOTHUB_REPO_FOLDER ${CMAKE_CURRENT_LIST_DIR}/deps/c-sdk CACHE INTERNAL "Location of the azure c sdk" FORCE)
-include_directories(${IOTHUB_REPO_FOLDER}/iothub_client/inc)
-include_directories(${IOTHUB_REPO_FOLDER}/provisioning_client/inc)
-include_directories(${IOTHUB_REPO_FOLDER}/iothub_service_client/inc)
+set(AZUREIOT_INC_FOLDER "/usr/local/include/azureiot" "/usr/local/include/azureiot/inc" "/usr/local/include/iothub_service_client")
+include_directories(${AZUREIOT_INC_FOLDER})
 
 include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
 include_directories(${CTEST_INC_FOLDER})
 include_directories(${UMOCK_C_INC_FOLDER})
 
 include_directories(${SHARED_UTIL_INC_FOLDER})
-
-include_directories(./inc)
-set(IOTHUB_TEST_INC_FOLDER ${CMAKE_CURRENT_LIST_DIR}/testtools/iothub_test/inc)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/testtools/iothub_test)
-
+include_directories(./testtools/iothub_test/inc)
+  
 include("${CMAKE_CURRENT_LIST_DIR}/configs/back_compat_functions.cmake")
 
 add_subdirectory(tests)
