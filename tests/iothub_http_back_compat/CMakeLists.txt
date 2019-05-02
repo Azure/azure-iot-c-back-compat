@@ -3,7 +3,6 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-#compileAsC11()
 set(theseTestsName iothub_http_back_compat)
 
 set(${theseTestsName}_test_files
@@ -33,25 +32,25 @@ include_directories(${IOTHUB_SERVICE_CLIENT_INC_FOLDER})
 
 if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
-            iothub_client
-            iothub_client_http_transport
-            iothub_service_client
-            uamqp
-            aziotsharedutil
-            parson
+        iothub_client
+        iothub_client_http_transport
+        iothub_service_client
+        uamqp
+        aziotsharedutil
+        parson
     )
 endif()
 
 if (WIN32)
     if(TARGET ${theseTestsName}_dll)
         target_link_libraries(${theseTestsName}_dll
-                iothub_client
-                iothub_client_http_transport
-                iothub_service_client
-                uamqp
-                aziotsharedutil
-                rpcrt4
-                parson
+            iothub_client
+            iothub_client_http_transport
+            iothub_service_client
+            uamqp
+            aziotsharedutil
+            rpcrt4
+            parson
         )
     endif()
 
@@ -59,11 +58,9 @@ if (WIN32)
        target_link_libraries(${theseTestsName}_exe rpcrt4)
    endif()
 else ()
-    if (UNIX) #LINUX OR APPLE
-        find_package(PkgConfig REQUIRED)
-        pkg_search_module(UUID REQUIRED uuid)
-        link_directories(${UUID_LIBRARY_DIRS})
-    endif ()
+    find_package(PkgConfig REQUIRED)
+    pkg_search_module(UUID REQUIRED uuid)
+    link_directories(${UUID_LIBRARY_DIRS})
 
     #if (APPLE)
     #    target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
