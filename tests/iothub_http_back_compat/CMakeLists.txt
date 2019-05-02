@@ -37,6 +37,7 @@ if (TARGET ${theseTestsName}_exe)
             iothub_client_http_transport
             iothub_service_client
             aziotsharedutil
+            parson
     )
 endif()
 
@@ -48,6 +49,7 @@ if (WIN32)
                 iothub_service_client
                 aziotsharedutil
                 rpcrt4
+                parson
         )
     endif()
 
@@ -61,9 +63,16 @@ else ()
         link_directories(${UUID_LIBRARY_DIRS})
     endif ()
 
-    if (APPLE)
-        target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
-    elseif (LINUX)
-        target_link_libraries(${theseTestsName}_exe pthread ${UUID_LIBRARIES} m)
-    endif()
+    #if (APPLE)
+    #    target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
+    #elseif (LINUX)
+        target_link_libraries(${theseTestsName}_exe
+            curl
+            ssl
+            crypto
+            m
+            pthread
+            ${UUID_LIBRARIES}
+        )
+    #endif()
 endif()
