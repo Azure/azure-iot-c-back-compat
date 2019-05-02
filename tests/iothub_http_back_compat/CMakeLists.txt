@@ -36,6 +36,7 @@ if (TARGET ${theseTestsName}_exe)
             iothub_client
             iothub_client_http_transport
             iothub_service_client
+            uamqp
             aziotsharedutil
             parson
     )
@@ -47,6 +48,7 @@ if (WIN32)
                 iothub_client
                 iothub_client_http_transport
                 iothub_service_client
+                uamqp
                 aziotsharedutil
                 rpcrt4
                 parson
