@@ -10,12 +10,13 @@ set(${theseTestsName}_test_files
 )
 
 set(${theseTestsName}_c_files
-    ../common_test_files/back_compat_test_common.c
+    ../common_test_files/iothub_back_compat_test_common.c
+    ../common_test_files/prov_custom_hsm.c
     ../../testtools/iothub_test/src/iothub_account.c
 )
 
 set(${theseTestsName}_h_files
-    ../common_test_files/back_compat_test_common.h
+    ../common_test_files/iothub_back_compat_test_common.h
     ../../testtools/iothub_test/src/iothub_account.c
 )
 

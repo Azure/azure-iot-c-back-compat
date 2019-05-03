@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#ifndef IOTHUBCLIENT_COMMON_E2E_H
-#define IOTHUBCLIENT_COMMON_E2E_H
+#ifndef IOTHUB_BACK_COMPAT_COMMON_E2E_H
+#define IOTHUB_BACK_COMPAT_COMMON_E2E_H
 
 #include "iothub_device_client.h"
 #include "iothub_account.h"
+#include "back_compat_test_const.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,15 +17,6 @@ typedef struct E2E_TEST_OPTIONS_TAG
     bool set_mac_address;
     bool use_special_chars;
 } E2E_TEST_OPTIONS;
-
-typedef enum TEST_PROTOCOL_TYPE_TAG
-{
-    TEST_MQTT,
-    TEST_MQTT_WEBSOCKETS,
-    TEST_AMQP,
-    TEST_AMQP_WEBSOCKETS,
-    TEST_HTTP
-} TEST_PROTOCOL_TYPE;
 
 typedef enum DEVICE_CREATION_TYPE_TAG
 {
@@ -57,4 +49,4 @@ extern int test_twin_with_device_client(BACK_COMPAT_HANDLE handle, DEVICE_CREATI
 }
 #endif
 
-#endif /* IOTHUBCLIENT_COMMON_E2E_H */
+#endif /* IOTHUB_BACK_COMPAT_COMMON_E2E_H */

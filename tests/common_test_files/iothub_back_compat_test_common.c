@@ -31,7 +31,7 @@
 #include "certs.h"
 #endif // SET_TRUSTED_CERT_IN_SAMPLES
 
-#include "back_compat_test_common.h"
+#include "iothub_back_compat_test_common.h"
 
 static bool g_callbackRecv = false;
 static TEST_PROTOCOL_TYPE test_protocol_type;
