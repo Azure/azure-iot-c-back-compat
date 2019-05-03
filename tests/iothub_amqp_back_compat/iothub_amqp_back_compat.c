@@ -6,7 +6,7 @@
 
 #include "testrunnerswitcher.h"
 
-#include "back_compat_test_common.h"
+#include "iothub_back_compat_test_common.h"
 #include "iothubtransportamqp.h"
 
 static BACK_COMPAT_HANDLE g_back_compat_handle;

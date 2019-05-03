@@ -10,12 +10,13 @@ set(${theseTestsName}_test_files
 )
 
 set(${theseTestsName}_c_files
-    ../common_test_files/back_compat_test_common.c
+    ../common_test_files/iothub_back_compat_test_common.c
+    ../common_test_files/prov_custom_hsm.c
     ../../testtools/iothub_test/src/iothub_account.c
 )
 
 set(${theseTestsName}_h_files
-    ../common_test_files/back_compat_test_common.h
+    ../common_test_files/iothub_back_compat_test_common.h
     ../../testtools/iothub_test/inc/iothub_account.h
 )
 
@@ -67,7 +68,7 @@ else ()
     #if (APPLE)
     #    target_link_libraries(${theseTestsName}_exe -L${UUID_LIBRARY_DIRS} pthread ${UUID_LIBRARIES})
     #elseif (LINUX)
-        target_link_libraries(${theseTestsName}_exe 
+        target_link_libraries(${theseTestsName}_exe
         curl
         ssl
         crypto
