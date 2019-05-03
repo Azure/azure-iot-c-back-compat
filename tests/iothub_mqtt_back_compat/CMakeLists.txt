@@ -34,6 +34,7 @@ if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
             iothub_client
             prov_auth_client
+            hsm_security_client
             iothub_client_mqtt_transport
             iothub_service_client
             uamqp
@@ -48,6 +49,7 @@ if (WIN32)
         target_link_libraries(${theseTestsName}_dll
                 iothub_client
                 prov_auth_client
+                hsm_security_client
                 iothub_client_mqtt_transport
                 iothub_service_client
                 uamqp
