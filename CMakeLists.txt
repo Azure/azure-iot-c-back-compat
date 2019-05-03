@@ -8,14 +8,6 @@ set(sdk_branch "master" CACHE STRING "Full path to custom HSM repo library")
 
 option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" ON)
 
-# do not add or build any tests of the dependencies
-set(run_e2e_tests OFF)
-set(run_unittests OFF)
-set(skip_samples ON)
-set(use_prov_client ON)
-# Set the custom HSM that we will be using
-set(hsm_type_custom ON)
-
 enable_testing()
 
 # Submodules
@@ -25,11 +17,18 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-ctest)
 if (${use_installed_dependencies})
     set(AZUREIOT_INC_FOLDER
         "/usr/local/include/azureiot"
-        "/usr/local/include/azureiot/inc"
         "/usr/local/include/iothub_service_client"
-        "/usr/local/include/azureiot/inc"
+        "/usr/local/include/azure_prov_client"
     )
 else()
+    # do not add or build any tests of the dependencies
+    set(run_e2e_tests OFF)
+    set(run_unittests OFF)
+    set(skip_samples ON)
+    set(use_prov_client ON)
+    # Set the custom HSM that we will be using
+    set(hsm_type_custom ON)
+
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/CMakeLists.txt")
         message("Cloning Azure Iot SDK C...")
         execute_process(COMMAND git clone https://github.com/Azure/azure-iot-sdk-c.git -q ${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c)
