@@ -6,13 +6,9 @@ project(azure_iot_c_back_compat)
 
 set(sdk_branch "master" CACHE STRING "Full path to custom HSM repo library")
 
-option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" ON)
+option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" OFF)
 
 enable_testing()
-
-# Submodules
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-c-testrunnerswitcher)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-ctest)
 
 if (${use_installed_dependencies})
     set(AZUREIOT_INC_FOLDER
@@ -40,12 +36,20 @@ else()
         "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/iothub_service_client/inc"
     )
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/parson)
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/c-utility/inc")
+
+    # Need to use the azure deps for testrunnerswitcher and ctest so you don't have to update these
+    # everytime you update the sdk
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/azure-c-testrunnerswitcher)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/azure-ctest)
 endif()
 
 IF(WIN32)
     #windows needs this define
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 ENDIF(WIN32)
+
+message("shared util directory ${TESTRUNNERSWITCHER_INC_FOLDER}")
 
 include_directories(${AZUREIOT_INC_FOLDER})
 include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
