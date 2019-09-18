@@ -34,9 +34,9 @@ include_directories(${IOTHUB_SERVICE_CLIENT_INC_FOLDER})
 if (TARGET ${theseTestsName}_exe)
     target_link_libraries(${theseTestsName}_exe
             iothub_client
+            iothub_client_mqtt_transport
             prov_auth_client
             hsm_security_client
-            iothub_client_mqtt_transport
             iothub_service_client
             uamqp
             umqtt
@@ -49,9 +49,9 @@ if (WIN32)
     if(TARGET ${theseTestsName}_dll)
         target_link_libraries(${theseTestsName}_dll
                 iothub_client
+                iothub_client_mqtt_transport
                 prov_auth_client
                 hsm_security_client
-                iothub_client_mqtt_transport
                 iothub_service_client
                 uamqp
                 umqtt

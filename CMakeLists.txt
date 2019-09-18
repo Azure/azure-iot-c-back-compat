@@ -6,13 +6,11 @@ project(azure_iot_c_back_compat)
 
 set(sdk_branch "master" CACHE STRING "Full path to custom HSM repo library")
 
-option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" ON)
+option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" OFF)
+option(skip_samples "set skip_samples to ON to skip building samples (default is ON)[if possible, they are always build]" ON)
+option(use_prov_client "Enable provisioning client" ON)
 
 enable_testing()
-
-# Submodules
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-c-testrunnerswitcher)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-ctest)
 
 if (${use_installed_dependencies})
     set(AZUREIOT_INC_FOLDER
@@ -22,12 +20,7 @@ if (${use_installed_dependencies})
     )
 else()
     # do not add or build any tests of the dependencies
-    set(run_e2e_tests OFF)
-    set(run_unittests OFF)
-    set(skip_samples ON)
-    set(use_prov_client ON)
-    # Set the custom HSM that we will be using
-    set(hsm_type_custom ON)
+    set(hsm_type_custom ON CACHE BOOL "hsm type of custom used with the Provisioning client")
 
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/CMakeLists.txt")
         message("Cloning Azure Iot SDK C...")
@@ -40,6 +33,12 @@ else()
         "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/iothub_service_client/inc"
     )
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/parson)
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/c-utility/inc")
+
+    # Need to use the azure deps for testrunnerswitcher and ctest so you don't have to update these
+    # everytime you update the sdk
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/azure-c-testrunnerswitcher)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/deps/azure-ctest)
 endif()
 
 IF(WIN32)
