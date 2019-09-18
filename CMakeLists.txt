@@ -7,6 +7,8 @@ project(azure_iot_c_back_compat)
 set(sdk_branch "master" CACHE STRING "Full path to custom HSM repo library")
 
 option(use_installed_dependencies "use_installed_dependencies to ON to use installed packages instead of building dependencies from submodules" OFF)
+option(skip_samples "set skip_samples to ON to skip building samples (default is ON)[if possible, they are always build]" ON)
+option(use_prov_client "Enable provisioning client" ON)
 
 enable_testing()
 
@@ -18,12 +20,7 @@ if (${use_installed_dependencies})
     )
 else()
     # do not add or build any tests of the dependencies
-    set(run_e2e_tests OFF)
-    set(run_unittests OFF)
-    set(skip_samples ON)
-    set(use_prov_client ON)
-    # Set the custom HSM that we will be using
-    set(hsm_type_custom ON)
+    set(hsm_type_custom ON CACHE BOOL "hsm type of custom used with the Provisioning client")
 
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/azure-iot-sdk-c/CMakeLists.txt")
         message("Cloning Azure Iot SDK C...")
@@ -48,8 +45,6 @@ IF(WIN32)
     #windows needs this define
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 ENDIF(WIN32)
-
-message("shared util directory ${TESTRUNNERSWITCHER_INC_FOLDER}")
 
 include_directories(${AZUREIOT_INC_FOLDER})
 include_directories(${TESTRUNNERSWITCHER_INC_FOLDER})
